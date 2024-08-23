@@ -1,0 +1,23 @@
+- hosts: all
+  remote_user: ec2-user
+  become: yes
+  tasks:
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+      tags: install
+
+    - name: Ensure Apache is started and enabled
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+      tags: service
+
+    - name: Deploy index.html
+      copy:
+        src: /home/ec2-user/index.html
+        dest: /var/www/html/index.html
+        mode: '0644'
+      tags: deploy

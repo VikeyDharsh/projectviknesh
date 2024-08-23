@@ -1,0 +1,149 @@
+create a amzl linux...
+
+select - Amazon Machine Image (AMI) >> kernel 5.10, ssd
+
+User data - optional 
+
+#!/bin/bash
+yum install python-pip -y
+
+Number of instances-3
+master slave slave
+=========================
+
+before open pageant Key List >> load the Key
+
+then open putty connection >> SSH>> Auth 
+
+~~other authentication-related option~~
+
+tick the -- Allow agent forwarding
+=================================================
+
+connect...
+
+# which python
+/usr/bin/python
+
+# which pip
+/usr/bin/pip
+
+===========================================
+next install ansible 
+
+# pip install ansible
+
+wait for some times for the installation...
+
+Successfully installed ansible-4.10.0 ansible-core-2.11.12 packaging-20.9 pyparsing-2.4.7 resolvelib-0.5.4
+
+=================
+in master server we are going to ansible....
+
+go to google search ....
+
+git ansible configuration open 3rd one
+
+
+Default Ansible config file
+
+GitHub
+https://gist.github.com › alivx
+
+go inside....
+
+click raw....
+
+copy url---https://gist.githubusercontent.com/alivx/2a4ca3e577ead4bd38d247c258e6513b/raw/fe2b9b1c7abc2b52cc6998525718c9a40c7e02a5/ansible.cfg
+
+=========================
+
+# wget https://gist.githubusercontent.com/alivx/2a4ca3e577ead4bd38d247c258e6513b/raw/fe2b9b1c7abc2b52cc6998525718c9a40c7e02a5/ansible.cfg
+
+ls
+ansible.cfg
+=============================================
+# ansible --version
+
+[DEPRECATION WARNING]: Ansible will require Python 3.8 or newer on the controller starting with Ansible 2.12. Current version: 2.7.18 (default, Dec 18 2023, 
+22:08:43) [GCC 7.3.1 20180712 (Red Hat 7.3.1-17)]. This feature will be removed from ansible-core in version 2.12. Deprecation warnings can be disabled by 
+setting deprecation_warnings=False in ansible.cfg.
+ansible [core 2.11.12] 
+  config file = /root/ansible.cfg
+  configured module search path = [u'/root/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/site-packages/ansible
+  ansible collection location = /root/.ansible/collections:/usr/share/ansible/collections
+  executable location = /bin/ansible
+  python version = 2.7.18 (default, Dec 18 2023, 22:08:43) [GCC 7.3.1 20180712 (Red Hat 7.3.1-17)]
+  jinja version = 2.7.2
+  libyaml = True
+
+note : we have installed the ansible...
+
+=================
+now create a text file and paste the private IP of the two slaves...
+
+vi slaves.txt
+
+cat slaves.txt 
+172.31.30.103
+
+172.31.30.39
+===============================================
+now we are going to ping the both slave server to master
+
+# ansible all -i slaves.txt -m ping
+give __yes
+
+[WARNING]: Platform linux on host 172.31.30.103 is using the discovered Python interpreter at /usr/bin/python, but
+future installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com
+/ansible-core/2.11/reference_appendices/interpreter_discovery.html for more information.
+172.31.30.103 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+========================
+
+to start the httpd service (from text file to httpd)
+
+# ansible all -i slaves.txt -m yum -a "name=httpd state=present" -b
+
+                  \n  mod_http2.x86_64 0:1.15.19-1.amzn2.0.2                                        \n\nComplete!\n"
+    ]
+}
+========================================================
+
+now we are going to start the httpd in server
+
+# ansible all -i slaves.txt -m service -a "name=httpd state=started" -b
+
+"WatchdogTimestampMonotonic": "0",
+        "WatchdogUSec": "0"
+    }
+}
+=================================================
+
+now copy the ip of 2 slaves server and open in the browser
+
+page opens.....Test page...!!!
+==================================
+now create a index.html file and copy an sourc code and paste in it
+
+ ls
+ansible.cfg  slaves.txt
+
+]$ vi index.html
+
+now copy the file to the middleware path.....
+
+]$ ansible all -i slaves.txt -m copy -a "src=/home/ec2-user/index.html dest=/var/www/html/index.html" -b
+
+
+now hit the both IP 
+
+the page changes...!!!
+
+========================================================

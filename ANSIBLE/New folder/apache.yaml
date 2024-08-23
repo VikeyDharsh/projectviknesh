@@ -1,0 +1,17 @@
+- hosts: all
+  remote_user: ec2-user
+  become: yes
+  tasks:
+  - name: Apache Installing....
+    yum:
+      name: httpd
+      state: present
+  - name: Apache service starting....
+    service:
+      name: httpd
+      state: started
+  - name: Code Deploying....
+    copy:
+      src: /home/ec2-user/index.html
+      dest: /var/www/html/index.html
+      

@@ -1,0 +1,179 @@
+What is Ansible?
+
+	Configuration tool -- file add/file install -- java -- 50 Server (Time/effort)
+	Deployment
+	Orchestration
+
+Master and Slaves
+
+Why we need Ansible?
+
+Ansible -- Push -- (Cloud/On-permises)
+Chef/Puppet -- (Cloud)
+Salt -- Push/pull
+
+Terraform -- Create a new one
+Ansible -- Interior design
+
+Installation
+--------------
+
+Prerequisite of running Ansible -- Python is in all machines
+------------------------------------------------------------------------
+
+#! /bin/bash
+yum install python-pip -y
+
+Normal Installation
+------------------------
+
+yum/apt install python -y
+
+Ansible Installation
+------------------------
+
+pip install ansible --> through pip
+
+yum/apt install ansible --> normal 
+
+Inventory file -- Slave's IP
+Config file
+
+Types
+-------
+
+1. Ad-hoc -- Single task
+2. Playbook -- Multiple tasks
+3. Vault -- Encrypt/Decrypt
+4. Role - Reusability
+
+Ad-hoc command for single task
+----------------------------------------
+
+ansible all -i slaves.txt -m ping --> Check for all slaves is running on master machine
+
+ansible all -i slaves.txt -a "date" --> Run command through master
+
+yum install httpd -y
+
+Install -- present
+Uninstall --  absent
+Start -- started
+Stop -- stopped
+become -- (-b)
+
+ansible all -i slaves.txt -m yum -a "name=httpd state=present" -b --> apache installation
+
+service httpd start
+
+ansible all -i slaves.txt -m service -a "name=httpd state=started" -b --> start the apache
+
+# Copy file from present directory to apache directory by using below command
+
+ansible all -i slaves.txt -m copy -a "src=/home/ec2-user/index.html dest=/var/www/html/index.html" -b
+
+Human -> Human == Tamil, English
+Human -- CPU == C, C++
+CPU -- CPU == Yaml, Json
+
+
+yum install httpd -y
+service httpd start
+copy src/des
+
+
+yum install httpd -y
+service httpd start
+index.html -- /var/www/html
+
+install -- present
+uninstall -- absent
+start -- started
+stop -- stopped
+become -- (-b)
+
+ansible all -i slaves.txt -m yum -a "name=httpd state=present" -b
+
+ansible all -i slaves.txt -m copy "src=/home/ec2-user/index.html dest=/var/www/html"
+
+update
+wget -- ansible module
+unzip -- ansible module
+
+
+scp ec2-user@172.31.1.155:/opt/apache-tomcat-9.0.89/conf/server.xml .
+vi server.xml
+Connector port: "{{tomcat_port}}"
+mv server.xml server.xml.j2 
+
+
+Human -- Human (Tamil, English)
+Human -- CPU (C, C++)
+CPU -- CPU (yaml, json)
+
+
+php
+mysql
+unzip
+http_present
+
+loop
+
+Yellow -- Changed
+Green -- Ok
+Red -- Failed
+
+
+Tomcat Installation
+------------------------
+
+yum update
+Java install
+Tomcat download
+Extract tomcat
+
+
+Tomcat port no (change)
+
+/conf/server.xml
+
+Start tomcat
+
+/bin/startup.sh
+
+Deploy
+
+/webapps/
+
+
+
+Vault
+====
+
+Encrypt
+Decrypt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

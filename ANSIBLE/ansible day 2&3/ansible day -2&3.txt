@@ -1,0 +1,310 @@
+
+
+==================================
+create a amzl linux...
+
+select - Amazon Machine Image (AMI) >> kernel 5.10, ssd
+
+User data - optional 
+
+#!/bin/bash
+yum install python-pip -y
+
+Number of instances-3
+master slave slave
+====================================================================================
+
+before open pageant Key List >> load the Key
+
+then open putty connection >> SSH>> Auth 
+
+~~other authentication-related option~~
+
+tick the -- Allow agent forwarding
+=====================================================================================
+
+connect...
+
+# which python
+/usr/bin/python
+
+# which pip
+/usr/bin/pip
+
+=======================================================================================
+next install ansible 
+
+# pip install ansible
+
+wait for some times for the installation...
+
+Successfully installed ansible-4.10.0 ansible-core-2.11.12 packaging-20.9 pyparsing-2.4.7 resolvelib-0.5.4
+
+=======================================================================================
+in master server we are going to ansible....
+
+go to google search ....
+
+git ansible configuration open 3rd one
+
+
+Default Ansible config file
+
+GitHub
+https://gist.github.com › alivx
+
+go inside....
+
+click raw....
+
+copy url---https://gist.githubusercontent.com/alivx/2a4ca3e577ead4bd38d247c258e6513b/raw/fe2b9b1c7abc2b52cc6998525718c9a40c7e02a5/ansible.cfg
+
+=========================================================================================
+
+# wget https://gist.githubusercontent.com/alivx/2a4ca3e577ead4bd38d247c258e6513b/raw/fe2b9b1c7abc2b52cc6998525718c9a40c7e02a5/ansible.cfg
+
+ls
+ansible.cfg
+========================================================================================
+# ansible --version
+
+[DEPRECATION WARNING]: Ansible will require Python 3.8 or newer on the controller starting with Ansible 2.12. Current version: 2.7.18 (default, Dec 18 2023, 
+22:08:43) [GCC 7.3.1 20180712 (Red Hat 7.3.1-17)]. This feature will be removed from ansible-core in version 2.12. Deprecation warnings can be disabled by 
+setting deprecation_warnings=False in ansible.cfg.
+ansible [core 2.11.12] 
+  config file = /root/ansible.cfg
+  configured module search path = [u'/root/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/site-packages/ansible
+  ansible collection location = /root/.ansible/collections:/usr/share/ansible/collections
+  executable location = /bin/ansible
+  python version = 2.7.18 (default, Dec 18 2023, 22:08:43) [GCC 7.3.1 20180712 (Red Hat 7.3.1-17)]
+  jinja version = 2.7.2
+  libyaml = True
+
+note : we have installed the ansible...
+
+======================================================================================
+now create a text file and paste the private IP of the two slaves...
+
+# vi slaves.txt
+
+# cat slaves.txt 
+172.31.30.103
+
+172.31.30.39
+=========================================================================================
+now we are going to ping the both slave server to master
+
+# ansible all -i slaves.txt -m ping
+give __yes
+
+[WARNING]: Platform linux on host 172.31.30.103 is using the discovered Python interpreter at /usr/bin/python, but
+future installation of another Python interpreter could change the meaning of that path. See https://docs.ansible.com
+/ansible-core/2.11/reference_appendices/interpreter_discovery.html for more information.
+172.31.30.103 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+=========================================================================================
+
+# ls
+ansible.cfg slaves.txt
+
+create new yaml file.....
+
+# vi apache.yml
+
+paste the apache file.......yaml script
+==========================================================================================
+# ansible-playbook -i slaves.txt apache.yml
+
+give -- yes
+
+
+
+
+[DEPRECATION WARNING]: Ansible will require Python 3.8 or newer on the
+controller starting with Ansible 2.12. Current version: 2.7.18 (default, Dec 18
+ 2023, 22:08:43) [GCC 7.3.1 20180712 (Red Hat 7.3.1-17)]. This feature will be
+removed from ansible-core in version 2.12. Deprecation warnings can be disabled
+ by setting deprecation_warnings=False in ansible.cfg.
+
+PLAY [all] *********************************************************************
+
+TASK [Gathering Facts] *********************************************************
+[WARNING]: Platform linux on host 54.255.142.252 is using the discovered Python
+interpreter at /usr/bin/python, but future installation of another Python
+interpreter could change the meaning of that path. See https://docs.ansible.com
+/ansible-core/2.11/reference_appendices/interpreter_discovery.html for more
+information.
+ok: [54.255.142.252]
+[WARNING]: Platform linux on host 18.138.58.56 is using the discovered Python
+interpreter at /usr/bin/python, but future installation of another Python
+interpreter could change the meaning of that path. See https://docs.ansible.com
+/ansible-core/2.11/reference_appendices/interpreter_discovery.html for more
+information.
+ok: [18.138.58.56]
+
+TASK [Install Apache] **********************************************************
+ok: [18.138.58.56]
+ok: [54.255.142.252]
+
+TASK [Ensure Apache is started and enabled] ************************************
+changed: [54.255.142.252]
+changed: [18.138.58.56]
+
+TASK [Deploy index.html] *******************************************************
+changed: [54.255.142.252]
+changed: [18.138.58.56]
+
+PLAY RECAP *********************************************************************
+18.138.58.56               : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+54.255.142.252             : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+======================================================================================
+
+
+
+next vault
+
+
+# ls
+ansible.cfg  apache.yml  slaves.txt
+
+edit new yaml file with vault scripts....
+
+# vi vault.yml
+ 
+paste the scripts....!!!!
+ msg: "My username is admin & password is admin123"
+=========================================================================================
+now run the script...
+
+# ansible-playbook -i slaves.txt vault.yml
+
+[DEPRECATION WARNING]: Ansible will require Python 3.8 or newer on the
+controller starting with Ansible 2.12. Current version: 2.7.18 (default, Dec 18
+ 2023, 22:08:43) [GCC 7.3.1 20180712 (Red Hat 7.3.1-17)]. This feature will be
+removed from ansible-core in version 2.12. Deprecation warnings can be disabled
+ by setting deprecation_warnings=False in ansible.cfg.
+
+PLAY [all] *********************************************************************
+
+TASK [Gathering Facts] *********************************************************
+[WARNING]: Platform linux on host 54.255.142.252 is using the discovered Python
+interpreter at /usr/bin/python, but future installation of another Python
+interpreter could change the meaning of that path. See https://docs.ansible.com
+/ansible-core/2.11/reference_appendices/interpreter_discovery.html for more
+information.
+ok: [54.255.142.252]
+[WARNING]: Platform linux on host 18.138.58.56 is using the discovered Python
+interpreter at /usr/bin/python, but future installation of another Python
+interpreter could change the meaning of that path. See https://docs.ansible.com
+/ansible-core/2.11/reference_appendices/interpreter_discovery.html for more
+information.
+ok: [18.138.58.56]
+
+TASK [Test echo command] *******************************************************
+ok: [18.138.58.56] => {
+    "msg": "My username is admin & password is admin123"
+}
+ok: [54.255.142.252] => {
+    "msg": "My username is admin & password is admin123"
+}
+
+PLAY RECAP *********************************************************************
+18.138.58.56               : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+54.255.142.252             : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+====================================================================================
+
+ls
+{  ansible.cfg  apache.yml  slaves.txt  vault.yml
+
+now create an another file......!!!!
+
+for securing the password!!!!
+# vi myconfig.yml
+type
+-------------------------
+username: admin
+password: admin123
+---------------------------
+# cat myconfig.yml
+
+username: admin
+password: admin123
+=============================================================
+next change the vault.yml file
+
+# vi vault.yml
+
+change the scripts
+
+ msg: "My username is {{ username }} and password is {{ password }}"
+=====================================================================
+# cat vault.yml
+
+ msg: "My username is {{ username }} and password is {{ password }}"
+=========================================================
+now run the vault.yml file....
+
+# ansible-playbook -i slaves.txt vault.yml
+
+
+now run the myconfig.yml file
+
+# ansible-vault encrypt myconfig.yml
+
+^^^^^^^^^
+
+===========================
+# cat myconfig.yml
+username: admin
+password: admin123
+
+now encrypt the myconfig.yml
+
+# ansible-vault encrypt myconfig.yml
+
+[DEPRECATION WARNING]: Ansible will require Python 3.8 or newer on the controller
+starting with Ansible 2.12. Current version: 2.7.18 (default, Dec 18 2023, 22:08:43)
+ [GCC 7.3.1 20180712 (Red Hat 7.3.1-17)]. This feature will be removed from ansible-
+core in version 2.12. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+
+New Vault password: >>>**type new password**
+Confirm New Vault password: >>>>**re type new password**
+
+Encryption successful
+
+=======================================================================
+now check the password: it will ner shown because we have hidden!!
+
+$ cat myconfig.yml
+
+$ANSIBLE_VAULT;1.1;AES256
+66626432313063323330386364616664656162663264396234303836663832613833633834393931
+3030386431386663356536376231333266346334356534640a643830633863386238653965363532
+35373839346266303436663465656361323335663331376265333235633638363832323163346463
+3539363439346633610a333566373834623161656639653130373366313137306132366435333166
+66626534646433313831626666373433363930613661353537303863366534393134303835633235
+6233386238373363356431616163623130343333613064303866
+==============================================================
+we can view the password ourself...
+
+# ansible-vault view myconfig.yml
+
+
+[DEPRECATION WARNING]: Ansible will require Python 3.8 or newer on the controller
+starting with Ansible 2.12. Current version: 2.7.18 (default, Dec 18 2023, 22:08:43)
+ [GCC 7.3.1 20180712 (Red Hat 7.3.1-17)]. This feature will be removed from ansible-
+core in version 2.12. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+Vault password: (type the password)
+username: admin
+password: admin123
+=========================================================================
+
