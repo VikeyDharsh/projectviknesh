@@ -1,0 +1,69 @@
+step 1 check terraform version
+
+$ terraform --version
+------------------------------------------------------------------------------------------------------
+step 2 install terraform version
+
+$ sudo yum install -y yum-utils shadow-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum -y install terraform
+----------------------------------------------------------------------------------------------------------
+step 4 create directory
+
+$ mkdir terraform
+cd
+terraform
+cd terraform/
+terraform]$ 
+--------------------------------
+step 5 create a file
+
+terraform]$ nano vpc.tr (copy and paste the code file)
+--------------------------------------------------------
+step 6 checking the versions
+
+$ terraform init
+----------------------------------------------------
+step 7 checkin the code is validate or not
+
+$ terraform validate
+--------------------------------------------------------
+step 8
+
+$ aws configure
+
+***
+***
+***
+***
+--------------------------------------------------------
+step 9 giving the plan which shows the plan of creating the vpc
+
+$ terraform plan 
+------------------------------------------------------------
+step 10 crete comment to create final output
+
+$ terraform apply
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+------------------------------------------------------------------
+next step step go to our VPC and check the process!!!!!
+
+ls
+terraform.tfstate  vpc.tf  vpc.tr
+[ec2-user@ip-172-31-42-242 terraform]$ 
+---------------------------------------------------------
+last step destroy every thing
+
+$ terraform destroy -auto-approve
+ 
+____"now g and check every thing will be deleted""___
+
+--------------------------------------------------------------
+
+
+({***change***})
